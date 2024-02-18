@@ -3,7 +3,9 @@ import { mascotas } from "../modelos/mascotasModelo.js"
 //Crear un recurso
 const crear = (req, res) => {
     if (!req.body.nombre) {
-        res.status(400).json({ mensaje: "El nombre no puede estar vacio." })
+        res.status(400).json({ 
+            tipo: "error",
+            mensaje: "El nombre no puede estar vacio." })
         return
     }
     const dataset = {
@@ -13,7 +15,10 @@ const crear = (req, res) => {
 
     //Usar Sequeliza para crear el recurso
     mascotas.create(dataset).then((resultado) => {
-        res.status(200).json("Registro creado correctamente")
+        res.status(200).json({
+            tipo: "success",
+            mensaje: "Registro creado correctamente"
+        })
     }).catch(err => res.send({ mensaje: `Error al crear el registro ::: ${err}` }))
 }
 
@@ -64,18 +69,18 @@ const actualizar = async (req, res) => {
         const { nombre, edad } = req.body;
 
         if (!nombre && !edad) {
-            res.status(400).json({ mensaje: "Los campos 'nombre' o 'edad' son requeridos para actualizar." });
+            res.status(400).json({ tipo:"error", mensaje: "Los campos 'nombre' o 'edad' son requeridos para actualizar." });
             return;
         }
         const pet = await mascotas.findByPk(id);
         if (!pet) {
-            res.status(404).json({ mensaje: "Mascota no encontrada." });
+            res.status(404).json({ tipo:"error", mensaje: "Mascota no encontrada." });
             return;
         }
         await pet.update({ nombre, edad });
-        res.status(200).json({ mensaje: "Registro actualizado correctamente" });
+        res.status(200).json({ tipo:"success", mensaje: "Registro actualizado correctamente" });
     } catch (error) {
-        res.status(500).json({ mensaje: `Error al actualizar la mascota: ${error.message}` });
+        res.status(500).json({ tipo:"error", mensaje: `Error al actualizar la mascota: ${error.message}` });
     }
 };
 
@@ -84,13 +89,13 @@ const eliminar = async (req, res) => {
         const { id } = req.params;
         const pet = await mascotas.findByPk(id);
         if (!pet) {
-            res.status(404).json({ mensaje: "Mascota no encontrada." });
+            res.status(404).json({ tipo:"error", mensaje: "Mascota no encontrada." });
             return;
         }
         await pet.destroy();
-        res.status(200).json({ mensaje: "Registro eliminado correctamente" });
+        res.status(200).json({ tipo:"success", mensaje: "Registro eliminado correctamente" });
     } catch (error) {
-        res.status(500).json({ mensaje: `Error al eliminar la mascota: ${error.message}` });
+        res.status(500).json({ tipo:"error", mensaje: `Error al eliminar la mascota: ${error.message}` });
     }
 };
 

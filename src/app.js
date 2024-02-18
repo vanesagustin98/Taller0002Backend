@@ -1,10 +1,12 @@
 import express from "express";
 import { routerMascotas } from "../rutas/mascotasRouter.js";
 import {db} from "../database/conexion.js"
+import cors from 'cors'
 // import bodyParser from 'body-parser'
 
 //Crear instancia de express
 const app = express()
+app.use(cors())
 
 // app.use(bodyParser.json())
 app.use(express.json())
